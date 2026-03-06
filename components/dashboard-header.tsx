@@ -1,22 +1,30 @@
-"use client"
+"use client";
 
-import { useAuth } from "@/lib/auth-context"
-import { useEffect, useState } from "react"
-import { SettingsModal } from "@/components/settings-modal"
-import { Settings } from "lucide-react"
+import { useAuth } from "@/lib/auth-context";
+import { useEffect, useState } from "react";
+import { SettingsModal } from "@/components/settings-modal";
+import {
+  Activity,
+  ChartNoAxesColumn,
+  CreditCard,
+  LogOut,
+  Settings,
+  Smartphone,
+  Users,
+} from "lucide-react";
 
 interface AnalyticsData {
-  activeUsers: number
-  todayVisitors: number
-  totalVisitors: number
-  visitorsWithCard: number
-  visitorsWithPhone: number
-  devices: Array<{ device: string; users: number }>
-  countries: Array<{ country: string; users: number }>
+  activeUsers: number;
+  todayVisitors: number;
+  totalVisitors: number;
+  visitorsWithCard: number;
+  visitorsWithPhone: number;
+  devices: Array<{ device: string; users: number }>;
+  countries: Array<{ country: string; users: number }>;
 }
 
 export function DashboardHeader() {
-  const { user, logout } = useAuth()
+  const { user, logout } = useAuth();
   const [analytics, setAnalytics] = useState<AnalyticsData>({
     activeUsers: 0,
     todayVisitors: 0,
@@ -25,142 +33,139 @@ export function DashboardHeader() {
     visitorsWithPhone: 0,
     devices: [],
     countries: [],
-  })
-  const [loading, setLoading] = useState(true)
-  const [showSettings, setShowSettings] = useState(false)
+  });
+  const [loading, setLoading] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const response = await fetch('/api/analytics')
-        const data = await response.json()
-        setAnalytics(data)
+        const response = await fetch("/api/analytics");
+        const data = await response.json();
+        setAnalytics(data);
       } catch (error) {
-        console.error('Error fetching analytics:', error)
+        console.error("Error fetching analytics:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchAnalytics()
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchAnalytics, 30000)
-    return () => clearInterval(interval)
-  }, [])
+    fetchAnalytics();
+    const interval = setInterval(fetchAnalytics, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
-  if (!user) return null
+  if (!user) return null;
 
-  // Get device names in Arabic
-  const getDeviceName = (device: string) => {
-    const names: Record<string, string> = {
-      'mobile': 'موبايل',
-      'desktop': 'كمبيوتر',
-      'tablet': 'تابلت',
-    }
-    return names[device.toLowerCase()] || device
-  }
+  const stats = [
+    {
+      title: "نشط الآن",
+      value: analytics.activeUsers,
+      icon: Activity,
+      accent: "text-emerald-700",
+      surface: "from-emerald-50 to-emerald-100/70 border-emerald-200/80",
+      dot: "bg-emerald-500",
+    },
+    {
+      title: "زوار اليوم",
+      value: analytics.todayVisitors,
+      icon: Users,
+      accent: "text-blue-700",
+      surface: "from-blue-50 to-blue-100/70 border-blue-200/80",
+      dot: "bg-blue-500",
+    },
+    {
+      title: "إجمالي (30 يوم)",
+      value: analytics.totalVisitors,
+      icon: ChartNoAxesColumn,
+      accent: "text-violet-700",
+      surface: "from-violet-50 to-violet-100/70 border-violet-200/80",
+      dot: "bg-violet-500",
+    },
+    {
+      title: "لديهم بطاقة",
+      value: analytics.visitorsWithCard,
+      icon: CreditCard,
+      accent: "text-amber-700",
+      surface: "from-amber-50 to-amber-100/70 border-amber-200/80",
+      dot: "bg-amber-500",
+    },
+    {
+      title: "لديهم هاتف",
+      value: analytics.visitorsWithPhone,
+      icon: Smartphone,
+      accent: "text-fuchsia-700",
+      surface: "from-fuchsia-50 to-fuchsia-100/70 border-fuchsia-200/80",
+      dot: "bg-fuchsia-500",
+    },
+  ];
 
   return (
-    <div className="bg-white border-b border-gray-200">
-      {/* Main Header */}
-      <div className="px-4 landscape:px-3 md:px-6 py-3 landscape:py-1.5 md:py-4 border-b border-gray-100">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          {/* Title */}
+    <div className="border-b border-slate-200/80 bg-white/85 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70">
+      <div className="border-b border-slate-200/70 px-4 py-3 md:px-6 md:py-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="text-xl landscape:text-sm md:text-2xl font-bold text-gray-800">لوحة التحكم</h1>
-            <p className="text-xs landscape:text-[10px] md:text-sm text-gray-600 landscape:hidden md:block">إدارة زوار BCare</p>
+            <h1 className="text-xl font-extrabold text-slate-900 md:text-2xl">
+              لوحة التحكم
+            </h1>
+            <p className="text-xs text-slate-600 md:text-sm">إدارة زوار BCare</p>
           </div>
 
-          {/* User Info & Logout */}
-          <div className="flex items-center gap-2 md:gap-4">
-            {/* Settings Button */}
-            <button
-              onClick={() => setShowSettings(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors"
-              title="إعدادات"
-            >
-              <Settings className="w-4 h-4 md:w-5 md:h-5" />
-            </button>
-            {/* User Email */}
-            <div className="text-left hidden md:block">
-              <p className="text-sm font-medium text-gray-700">{user.email}</p>
-              <p className="text-xs text-gray-500">مسؤول النظام</p>
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="hidden rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2 text-left md:block">
+              <p className="text-sm font-semibold text-slate-800">{user.email}</p>
+              <p className="text-xs text-slate-500">مسؤول النظام</p>
             </div>
 
-            {/* Logout Button */}
+            <button
+              onClick={() => setShowSettings(true)}
+              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900"
+              title="إعدادات"
+            >
+              <Settings className="h-4 w-4 md:h-5 md:w-5" />
+            </button>
+
             <button
               onClick={logout}
-              className="bg-red-500 hover:bg-red-600 text-white px-2 landscape:px-2 md:px-4 py-1 landscape:py-1 md:py-2 rounded-lg text-[10px] landscape:text-[10px] md:text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-rose-700 md:text-sm"
             >
+              <LogOut className="h-4 w-4" />
               تسجيل الخروج
             </button>
           </div>
         </div>
       </div>
 
-      {/* Analytics Stats Bar */}
-      <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-green-50 px-4 md:px-6 py-2">
-        <div className="grid grid-cols-5 gap-2 md:gap-3">
-          {/* Active Users */}
-          <div className="flex flex-col gap-0.5 bg-white/70 backdrop-blur-sm rounded-lg p-1.5 md:p-2 border border-green-200">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-gray-600">نشط الآن</span>
-            </div>
-            <span className="text-base md:text-xl font-bold text-green-600">
-              {loading ? '...' : analytics.activeUsers}
-            </span>
-          </div>
-
-          {/* Today's Visitors */}
-          <div className="flex flex-col gap-0.5 bg-white/70 backdrop-blur-sm rounded-lg p-1.5 md:p-2 border border-blue-200">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span className="text-xs text-gray-600">زوار اليوم</span>
-            </div>
-            <span className="text-base md:text-xl font-bold text-blue-600">
-              {loading ? '...' : analytics.todayVisitors}
-            </span>
-          </div>
-
-          {/* Total Visitors */}
-          <div className="flex flex-col gap-0.5 bg-white/70 backdrop-blur-sm rounded-lg p-1.5 md:p-2 border border-purple-200">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-              <span className="text-xs text-gray-600">إجمالي (30 يوم)</span>
-            </div>
-            <span className="text-base md:text-xl font-bold text-purple-600">
-              {loading ? '...' : analytics.totalVisitors}
-            </span>
-          </div>
-
-          {/* Visitors with Card */}
-          <div className="flex flex-col gap-0.5 bg-white/70 backdrop-blur-sm rounded-lg p-1.5 md:p-2 border border-orange-200">
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs">💳</span>
-              <span className="text-xs text-gray-600">لديهم بطاقة</span>
-            </div>
-            <span className="text-base md:text-xl font-bold text-orange-600">
-              {loading ? '...' : analytics.visitorsWithCard}
-            </span>
-          </div>
-
-          {/* Visitors with Phone */}
-          <div className="flex flex-col gap-0.5 bg-white/70 backdrop-blur-sm rounded-lg p-1.5 md:p-2 border border-pink-200">
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs">📱</span>
-              <span className="text-xs text-gray-600">لديهم هاتف</span>
-            </div>
-            <span className="text-base md:text-xl font-bold text-pink-600">
-              {loading ? '...' : analytics.visitorsWithPhone}
-            </span>
-          </div>
-
+      <div className="px-4 py-3 md:px-6">
+        <div className="grid grid-cols-2 gap-2 md:gap-3 lg:grid-cols-5">
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <div
+                key={stat.title}
+                className={`rounded-2xl border bg-gradient-to-br p-3 shadow-sm ${stat.surface}`}
+              >
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                    <span
+                      className={`h-2 w-2 rounded-full ${stat.dot} ${
+                        stat.title === "نشط الآن" ? "animate-pulse" : ""
+                      }`}
+                    />
+                    {stat.title}
+                  </div>
+                  <Icon className={`h-4 w-4 ${stat.accent}`} />
+                </div>
+                <p className={`text-xl font-extrabold md:text-2xl ${stat.accent}`}>
+                  {loading ? "..." : stat.value}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Settings Modal */}
       <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
     </div>
-  )
+  );
 }
