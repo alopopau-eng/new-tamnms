@@ -39,12 +39,18 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100" dir="rtl">
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
+    <div
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-blue-50 to-emerald-50 px-4"
+      dir="rtl"
+    >
+      <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white/95 p-8 shadow-2xl backdrop-blur">
         {/* Logo/Title */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">لوحة التحكم</h1>
-          <p className="text-gray-600">تسجيل الدخول للإدارة</p>
+          <span className="inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700 mb-3">
+            BCare Dashboard
+          </span>
+          <h1 className="text-3xl font-extrabold text-slate-800 mb-2">لوحة التحكم</h1>
+          <p className="text-slate-600">تسجيل الدخول للإدارة</p>
         </div>
 
         {/* Login Form */}
@@ -60,7 +66,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all outline-none"
               placeholder="admin@example.com"
               disabled={loading}
             />
@@ -77,7 +83,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all outline-none"
               placeholder="••••••••"
               disabled={loading}
             />
@@ -85,7 +91,7 @@ export default function LoginPage() {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
               {error}
             </div>
           )}
@@ -94,14 +100,14 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
           </button>
         </form>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className="mt-6 text-center text-sm text-slate-500">
           <p>© 2025 لوحة التحكم - جميع الحقوق محفوظة</p>
         </div>
       </div>

