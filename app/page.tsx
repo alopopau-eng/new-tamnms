@@ -13,11 +13,13 @@ import { DashboardHeader } from "@/components/dashboard-header";
 import { Timestamp } from "firebase/firestore";
 
 export default function Dashboard() {
+  const PAGE_SIZE = 15;
   const [applications, setApplications] = useState<InsuranceApplication[]>([]);
   const [selectedVisitor, setSelectedVisitor] =
     useState<InsuranceApplication | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [cardFilter, setCardFilter] = useState<"all" | "hasCard">("all");
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(215); // Default landscape width
@@ -166,19 +168,46 @@ export default function Dashboard() {
     return filtered;
   }, [applications, cardFilter, searchQuery]);
 
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredApplications.length / PAGE_SIZE)
+  );
+  const normalizedCurrentPage = Math.min(currentPage, totalPages);
+
+  const paginatedApplications = useMemo(() => {
+    const startIndex = (normalizedCurrentPage - 1) * PAGE_SIZE;
+    return filteredApplications.slice(startIndex, startIndex + PAGE_SIZE);
+  }, [filteredApplications, normalizedCurrentPage]);
+
+  const onlineCount = useMemo(
+    () => filteredApplications.filter((app) => app.isOnline).length,
+    [filteredApplications]
+  );
+
+  const unreadCount = useMemo(
+    () => filteredApplications.filter((app) => app.isUnread).length,
+    [filteredApplications]
+  );
+
   // Handle select all
   const handleSelectAll = () => {
-    if (selectedIds.size === filteredApplications.length) {
-      setSelectedIds(new Set());
-    } else {
-      setSelectedIds(
-        new Set(
-          filteredApplications
-            .map((app) => app.id)
-            .filter((id): id is string => id !== undefined)
-        )
-      );
-    }
+    const pageIds = paginatedApplications
+      .map((app) => app.id)
+      .filter((id): id is string => id !== undefined);
+
+    setSelectedIds((prevSelected) => {
+      const allPageSelected =
+        pageIds.length > 0 && pageIds.every((id) => prevSelected.has(id));
+      const nextSelected = new Set(prevSelected);
+
+      if (allPageSelected) {
+        pageIds.forEach((id) => nextSelected.delete(id));
+      } else {
+        pageIds.forEach((id) => nextSelected.add(id));
+      }
+
+      return nextSelected;
+    });
   };
 
   // Handle delete selected
@@ -238,27 +267,44 @@ export default function Dashboard() {
       <div className="flex-1 flex flex-col landscape:flex-row md:flex-row overflow-hidden">
         {/* Right Sidebar - Visitor List */}
         <VisitorSidebar
-          visitors={filteredApplications}
+          visitors={paginatedApplications}
           selectedVisitor={selectedVisitor}
           onSelectVisitor={handleSelectVisitor}
           searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
+          onSearchChange={(query) => {
+            setSearchQuery(query);
+            setCurrentPage(1);
+          }}
           cardFilter={cardFilter}
-          onCardFilterChange={setCardFilter}
+          onCardFilterChange={(filter) => {
+            setCardFilter(filter);
+            setCurrentPage(1);
+          }}
           selectedIds={selectedIds}
           onToggleSelect={(id) => {
-            const newSet = new Set(selectedIds);
-            if (newSet.has(id)) {
-              newSet.delete(id);
-            } else {
-              newSet.add(id);
-            }
-            setSelectedIds(newSet);
+            setSelectedIds((prevSelected) => {
+              const nextSelected = new Set(prevSelected);
+              if (nextSelected.has(id)) {
+                nextSelected.delete(id);
+              } else {
+                nextSelected.add(id);
+              }
+              return nextSelected;
+            });
           }}
           onSelectAll={handleSelectAll}
           onDeleteSelected={handleDeleteSelected}
           sidebarWidth={sidebarWidth}
           onSidebarWidthChange={setSidebarWidth}
+          totalVisitors={filteredApplications.length}
+          onlineCount={onlineCount}
+          unreadCount={unreadCount}
+          currentPage={normalizedCurrentPage}
+          totalPages={totalPages}
+          pageSize={PAGE_SIZE}
+          onPageChange={(page) =>
+            setCurrentPage(Math.min(Math.max(1, page), totalPages))
+          }
         />
 
         {/* Left Side - Visitor Details */}
