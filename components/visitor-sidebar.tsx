@@ -86,7 +86,6 @@ export function VisitorSidebar({
 }: VisitorSidebarProps) {
   const allSelected = visitors.length > 0 && selectedIds.size === visitors.length
   const [isLandscapeTablet, setIsLandscapeTablet] = useState(false)
-
   useEffect(() => {
     const mediaQuery = window.matchMedia("(orientation: landscape) and (max-width: 1024px)")
     const updateMatch = () => setIsLandscapeTablet(mediaQuery.matches)
@@ -169,6 +168,36 @@ export function VisitorSidebar({
             </button>
           )}
         </div>
+
+        <div className="mt-3 flex flex-wrap items-center gap-2 landscape:mt-2">
+          <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
+            الإجمالي: {visitors.length}
+          </span>
+          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+            متصل: {onlineCount}
+          </span>
+          <span className="rounded-full bg-fuchsia-100 px-2.5 py-1 text-[11px] font-semibold text-fuchsia-700">
+            غير مقروء: {unreadCount}
+          </span>
+        </div>
+
+        {isLandscapeTablet && (
+          <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 landscape:mt-2">
+            <div className="mb-1 flex items-center justify-between text-[11px] font-semibold text-slate-600">
+              <span>عرض القائمة</span>
+              <span>{sidebarWidth}px</span>
+            </div>
+            <input
+              type="range"
+              min={280}
+              max={520}
+              step={10}
+              value={sidebarWidth}
+              onChange={(event) => onSidebarWidthChange(Number(event.target.value))}
+              className="h-1.5 w-full cursor-pointer accent-emerald-600"
+            />
+          </div>
+        )}
       </div>
 
       {/* Visitor List */}

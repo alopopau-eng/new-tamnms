@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { X, Plus, Trash2, CreditCard, Globe } from "lucide-react"
+import { X, Plus, CreditCard, Globe, Ban, CheckCircle2 } from "lucide-react"
 import { 
   getSettings, 
   addBlockedCardBin, 
@@ -55,6 +55,25 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       loadSettings()
     }
   }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose()
+      }
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    window.addEventListener("keydown", handleEscape)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener("keydown", handleEscape)
+    }
+  }, [isOpen, onClose])
 
   const loadSettings = async () => {
     try {
@@ -144,117 +163,142 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
   if (!isOpen) return null
 
+  const availableCountries = COUNTRIES.filter(
+    (country) => !settings.allowedCountries.includes(country.code)
+  )
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">⚙️ إعدادات النظام</h2>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-800 p-5 text-white md:p-6">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h2 className="text-2xl font-extrabold">إعدادات النظام</h2>
+              <p className="mt-1 text-sm text-slate-200">
+                إدارة حجب البطاقات وتقييد الوصول حسب الدولة
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                <span className="rounded-full bg-white/15 px-3 py-1">
+                  بطاقات محظورة: {settings.blockedCardBins.length}
+                </span>
+                <span className="rounded-full bg-white/15 px-3 py-1">
+                  دول مسموحة: {settings.allowedCountries.length}
+                </span>
+              </div>
+            </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              className="rounded-xl p-2.5 text-slate-100 transition hover:bg-white/20"
+              aria-label="إغلاق"
             >
-              <X className="w-6 h-6" />
+              <X className="h-5 w-5" />
             </button>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b border-gray-200">
-          <button
-            onClick={() => setActiveTab("cards")}
-            className={`flex-1 py-4 px-6 font-semibold transition-colors ${
-              activeTab === "cards"
-                ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
-                : "text-gray-600 hover:bg-gray-50"
-            }`}
-          >
-            <div className="flex items-center justify-center gap-2">
-              <CreditCard className="w-5 h-5" />
+        <div className="border-b border-slate-200 bg-slate-50/80 px-4 py-3">
+          <div className="grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+            <button
+              onClick={() => setActiveTab("cards")}
+              className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                activeTab === "cards"
+                  ? "bg-sky-100 text-sky-800"
+                  : "text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              <CreditCard className="h-4 w-4" />
               <span>حجب بطاقات الدفع</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab("countries")}
-            className={`flex-1 py-4 px-6 font-semibold transition-colors ${
-              activeTab === "countries"
-                ? "text-purple-600 border-b-2 border-purple-600 bg-purple-50"
-                : "text-gray-600 hover:bg-gray-50"
-            }`}
-          >
-            <div className="flex items-center justify-center gap-2">
-              <Globe className="w-5 h-5" />
+              <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-600">
+                {settings.blockedCardBins.length}
+              </span>
+            </button>
+            <button
+              onClick={() => setActiveTab("countries")}
+              className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                activeTab === "countries"
+                  ? "bg-purple-100 text-purple-800"
+                  : "text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              <Globe className="h-4 w-4" />
               <span>تقييد الوصول حسب الدولة</span>
-            </div>
-          </button>
+              <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-600">
+                {settings.allowedCountries.length}
+              </span>
+            </button>
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[60vh]">
+        <div className="max-h-[58vh] overflow-y-auto p-5 md:p-6">
           {activeTab === "cards" ? (
-            <div className="space-y-6">
-              {/* Title and Description */}
-              <div className="text-center">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">قائمة حجب بطاقات الدفع</h3>
-                <p className="text-sm text-gray-600">
-                  أضف البيانات الخاصة بأرقام البطاقات التي لا تريده. يمكنك إضافة مجموعة من البيانات
-                  <br />
-                  مفصولة بفاصلة أو فاصلة أو سطر جديد. اضغط Enter لإضافة كل بلوك.
+            <div className="space-y-5">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                <h3 className="mb-1 text-lg font-bold text-slate-800">
+                  قائمة حجب بطاقات الدفع
+                </h3>
+                <p className="text-sm text-slate-600">
+                  أدخل BIN مكوّن من 4 أرقام. يمكنك إضافة مجموعة أرقام مفصولة
+                  بمسافة أو فاصلة أو سطر جديد.
                 </p>
               </div>
 
-              {/* Multi-line Input */}
-              <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+              <div className="rounded-2xl border border-sky-200 bg-sky-50/60 p-4">
                 <textarea
                   value={newBinsInput}
                   onChange={(e) => setNewBinsInput(e.target.value)}
-                  placeholder="مثال: 4890, 4458, 4909&#10;أو كل رقم في سطر منفصل"
+                  placeholder={"مثال: 4890, 4458, 4909\nأو كل رقم في سطر منفصل"}
                   rows={4}
                   dir="ltr"
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none text-lg font-mono resize-none"
+                  className="w-full resize-none rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg font-mono text-slate-800 shadow-sm outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
                 />
-                <div className="flex justify-between items-center mt-3">
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
                   <button
                     onClick={handleAddBins}
                     disabled={loading || !newBinsInput.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2"
+                    className="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-400"
                   >
-                    <Plus className="w-5 h-5" />
-                    حفظ
+                    <Plus className="h-4 w-4" />
+                    حفظ البطاقات
                   </button>
                   <button
                     onClick={() => setNewBinsInput("")}
-                    className="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg font-semibold transition-colors"
+                    disabled={loading || !newBinsInput.trim()}
+                    className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    إلغاء
+                    مسح الحقل
                   </button>
                 </div>
               </div>
 
-              {/* Blocked BINs List as Badges */}
-              <div>
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
                 {settings.blockedCardBins.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
-                    <CreditCard className="w-12 h-12 mx-auto mb-2 opacity-30" />
-                    <p>لا توجد بطاقات محظورة</p>
+                  <div className="rounded-xl border border-dashed border-slate-300 py-10 text-center text-slate-500">
+                    <Ban className="mx-auto mb-2 h-10 w-10 opacity-45" />
+                    <p className="font-medium">لا توجد بطاقات محظورة</p>
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-2">
                     {settings.blockedCardBins.map((bin) => (
                       <div
                         key={bin}
-                        className="bg-gray-100 border border-gray-300 rounded-full px-4 py-2 flex items-center gap-2"
+                        className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-slate-50 px-4 py-2"
                       >
-                        <span className="font-mono text-sm font-semibold text-gray-700">
+                        <span className="font-mono text-sm font-semibold text-slate-700">
                           {bin}
                         </span>
                         <button
                           onClick={() => handleRemoveBin(bin)}
                           disabled={loading}
-                          className="text-gray-500 hover:text-red-600 transition-colors"
+                          className="rounded-full p-1 text-slate-500 transition hover:bg-rose-100 hover:text-rose-600"
+                          aria-label={`حذف ${bin}`}
                         >
-                          <X className="w-4 h-4" />
+                          <X className="h-3.5 w-3.5" />
                         </button>
                       </div>
                     ))}
@@ -263,31 +307,29 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               </div>
             </div>
           ) : (
-            <div className="space-y-6">
-              {/* Title and Description */}
-              <div className="text-center">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">تقييد الوصول حسب الدولة</h3>
-                <p className="text-sm text-gray-600">
-                  تحكم في الدول التي تسمح لها بالوصول إلى موقعك الإلكتروني للتعزيز الأمان.
-                  <br />
-                  يمكنك إضافة أكثر من دولة. وسيمنع الوصول من أي دولة غير موجودة في القائمة.
+            <div className="space-y-5">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                <h3 className="mb-1 text-lg font-bold text-slate-800">
+                  تقييد الوصول حسب الدولة
+                </h3>
+                <p className="text-sm text-slate-600">
+                  لا يُسمح بالدخول إلا للدول الموجودة في القائمة التالية.
                 </p>
               </div>
 
-              {/* Country Dropdown */}
-              <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  - الدول المسموح لها بالوصول -
+              <div className="rounded-2xl border border-purple-200 bg-purple-50/65 p-4">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  اختر دولة لإضافتها
                 </label>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <select
                     value={selectedCountry}
                     onChange={(e) => setSelectedCountry(e.target.value)}
-                    className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-base"
+                    className="min-w-[220px] flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-700 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
                     dir="rtl"
                   >
                     <option value="">اختر دولة...</option>
-                    {COUNTRIES.filter(c => !settings.allowedCountries.includes(c.code)).map((country) => (
+                    {availableCountries.map((country) => (
                       <option key={country.code} value={country.code}>
                         {country.flag} {country.name}
                       </option>
@@ -296,42 +338,44 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                   <button
                     onClick={handleAddCountry}
                     disabled={loading || !selectedCountry}
-                    className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                    className="rounded-xl bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-purple-700 disabled:cursor-not-allowed disabled:bg-slate-400"
                   >
-                    حفظ
+                    إضافة
                   </button>
                 </div>
-                <p className="text-xs text-gray-600 mt-2">
+                <p className="mt-2 text-xs text-slate-600">
                   يمكنك إضافة أكثر من دولة غير موجودة في القائمة.
                 </p>
               </div>
 
-              {/* Allowed Countries List as Badges */}
-              <div>
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
                 {settings.allowedCountries.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
-                    <Globe className="w-12 h-12 mx-auto mb-2 opacity-30" />
-                    <p>جميع الدول مسموحة (لم يتم تحديد قيود)</p>
+                  <div className="rounded-xl border border-dashed border-slate-300 py-10 text-center text-slate-500">
+                    <Globe className="mx-auto mb-2 h-10 w-10 opacity-45" />
+                    <p className="font-medium">جميع الدول مسموحة حالياً</p>
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-2">
                     {settings.allowedCountries.map((countryCode) => {
-                      const country = COUNTRIES.find(c => c.code === countryCode)
+                      const country = COUNTRIES.find(
+                        (countryItem) => countryItem.code === countryCode
+                      )
                       return (
                         <div
                           key={countryCode}
-                          className="bg-green-50 border border-green-300 rounded-full px-4 py-2 flex items-center gap-2"
+                          className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2"
                         >
                           <span className="text-lg">{country?.flag || "🌍"}</span>
-                          <span className="text-sm font-semibold text-gray-700">
+                          <span className="text-sm font-semibold text-slate-700">
                             {country?.name || countryCode}
                           </span>
                           <button
                             onClick={() => handleRemoveCountry(countryCode)}
                             disabled={loading}
-                            className="text-gray-500 hover:text-red-600 transition-colors"
+                            className="rounded-full p-1 text-slate-500 transition hover:bg-rose-100 hover:text-rose-600"
+                            aria-label={`حذف ${countryCode}`}
                           >
-                            <X className="w-4 h-4" />
+                            <X className="h-3.5 w-3.5" />
                           </button>
                         </div>
                       )
@@ -343,11 +387,14 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           )}
         </div>
 
-        {/* Footer */}
-        <div className="border-t border-gray-200 p-4 bg-gray-50 flex gap-3">
+        <div className="flex items-center justify-between gap-3 border-t border-slate-200 bg-slate-50 px-5 py-4">
+          <div className="hidden items-center gap-2 text-xs text-slate-500 md:flex">
+            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+            يتم حفظ جميع التغييرات مباشرة.
+          </div>
           <button
             onClick={onClose}
-            className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-semibold transition-colors"
+            className="w-full rounded-xl bg-slate-800 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-900 md:w-auto md:px-8"
           >
             إغلاق
           </button>
