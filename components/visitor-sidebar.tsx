@@ -86,9 +86,6 @@ export function VisitorSidebar({
 }: VisitorSidebarProps) {
   const allSelected = visitors.length > 0 && selectedIds.size === visitors.length
   const [isLandscapeTablet, setIsLandscapeTablet] = useState(false)
-  const unreadCount = visitors.filter((visitor) => visitor.isUnread).length
-  const onlineCount = visitors.filter((visitor) => visitor.isOnline).length
-
   useEffect(() => {
     const mediaQuery = window.matchMedia("(orientation: landscape) and (max-width: 1024px)")
     const updateMatch = () => setIsLandscapeTablet(mediaQuery.matches)
