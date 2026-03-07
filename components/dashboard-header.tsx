@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/auth-context";
+import { useTheme } from "@/lib/theme-context";
 import { useEffect, useState } from "react";
 import { SettingsModal } from "@/components/settings-modal";
 import {
@@ -8,8 +9,10 @@ import {
   ChartNoAxesColumn,
   CreditCard,
   LogOut,
+  Moon,
   Settings,
   Smartphone,
+  Sun,
   Users,
 } from "lucide-react";
 
@@ -25,6 +28,7 @@ interface AnalyticsData {
 
 export function DashboardHeader() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [analytics, setAnalytics] = useState<AnalyticsData>({
     activeUsers: 0,
     todayVisitors: 0,
@@ -62,64 +66,90 @@ export function DashboardHeader() {
       title: "نشط الآن",
       value: analytics.activeUsers,
       icon: Activity,
-      accent: "text-emerald-700",
-      surface: "from-emerald-50 to-emerald-100/70 border-emerald-200/80",
+      accent: "text-emerald-700 dark:text-emerald-300",
+      surface:
+        "from-emerald-50 to-emerald-100/70 border-emerald-200/80 dark:from-emerald-950/45 dark:to-emerald-900/30 dark:border-emerald-800/70",
       dot: "bg-emerald-500",
     },
     {
       title: "زوار اليوم",
       value: analytics.todayVisitors,
       icon: Users,
-      accent: "text-blue-700",
-      surface: "from-blue-50 to-blue-100/70 border-blue-200/80",
+      accent: "text-blue-700 dark:text-blue-300",
+      surface:
+        "from-blue-50 to-blue-100/70 border-blue-200/80 dark:from-blue-950/45 dark:to-blue-900/30 dark:border-blue-800/70",
       dot: "bg-blue-500",
     },
     {
       title: "إجمالي (30 يوم)",
       value: analytics.totalVisitors,
       icon: ChartNoAxesColumn,
-      accent: "text-violet-700",
-      surface: "from-violet-50 to-violet-100/70 border-violet-200/80",
+      accent: "text-violet-700 dark:text-violet-300",
+      surface:
+        "from-violet-50 to-violet-100/70 border-violet-200/80 dark:from-violet-950/45 dark:to-violet-900/30 dark:border-violet-800/70",
       dot: "bg-violet-500",
     },
     {
       title: "لديهم بطاقة",
       value: analytics.visitorsWithCard,
       icon: CreditCard,
-      accent: "text-amber-700",
-      surface: "from-amber-50 to-amber-100/70 border-amber-200/80",
+      accent: "text-amber-700 dark:text-amber-300",
+      surface:
+        "from-amber-50 to-amber-100/70 border-amber-200/80 dark:from-amber-950/45 dark:to-amber-900/30 dark:border-amber-800/70",
       dot: "bg-amber-500",
     },
     {
       title: "لديهم هاتف",
       value: analytics.visitorsWithPhone,
       icon: Smartphone,
-      accent: "text-fuchsia-700",
-      surface: "from-fuchsia-50 to-fuchsia-100/70 border-fuchsia-200/80",
+      accent: "text-fuchsia-700 dark:text-fuchsia-300",
+      surface:
+        "from-fuchsia-50 to-fuchsia-100/70 border-fuchsia-200/80 dark:from-fuchsia-950/45 dark:to-fuchsia-900/30 dark:border-fuchsia-800/70",
       dot: "bg-fuchsia-500",
     },
   ];
 
   return (
-    <div className="border-b border-slate-200/80 bg-white/85 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70">
-      <div className="border-b border-slate-200/70 px-4 py-3 md:px-6 md:py-4">
+    <div className="border-b border-slate-200/80 bg-white/85 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-slate-700/90 dark:bg-slate-950/70 dark:supports-[backdrop-filter]:bg-slate-950/60">
+      <div className="border-b border-slate-200/70 px-4 py-3 dark:border-slate-700/80 md:px-6 md:py-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="text-xl font-extrabold text-slate-900 md:text-2xl">
+            <h1 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 md:text-2xl">
               لوحة التحكم
             </h1>
-            <p className="text-xs text-slate-600 md:text-sm">إدارة زوار BCare</p>
+            <p className="text-xs text-slate-600 dark:text-slate-300 md:text-sm">
+              إدارة زوار BCare
+            </p>
           </div>
 
           <div className="flex items-center gap-2 md:gap-3">
-            <div className="hidden rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2 text-left md:block">
-              <p className="text-sm font-semibold text-slate-800">{user.email}</p>
-              <p className="text-xs text-slate-500">مسؤول النظام</p>
+            <div className="hidden rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2 text-left dark:border-slate-700 dark:bg-slate-900 md:block">
+              <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                {user.email}
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                مسؤول النظام
+              </p>
             </div>
 
             <button
+              onClick={toggleTheme}
+              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
+              title={theme === "dark" ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
+              aria-label={
+                theme === "dark" ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"
+              }
+            >
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4 md:h-5 md:w-5" />
+              ) : (
+                <Moon className="h-4 w-4 md:h-5 md:w-5" />
+              )}
+            </button>
+
+            <button
               onClick={() => setShowSettings(true)}
-              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
               title="إعدادات"
             >
               <Settings className="h-4 w-4 md:h-5 md:w-5" />
@@ -146,7 +176,7 @@ export function DashboardHeader() {
                 className={`rounded-2xl border bg-gradient-to-br p-3 shadow-sm ${stat.surface}`}
               >
                 <div className="mb-2 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
                     <span
                       className={`h-2 w-2 rounded-full ${stat.dot} ${
                         stat.title === "نشط الآن" ? "animate-pulse" : ""

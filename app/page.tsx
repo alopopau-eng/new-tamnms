@@ -252,17 +252,19 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-50/60">
-        <div className="rounded-2xl border border-slate-200 bg-white/90 p-8 text-center shadow-lg">
+      <div className="flex h-screen items-center justify-center bg-slate-50/60 dark:bg-slate-950/70">
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-8 text-center shadow-lg dark:border-slate-700 dark:bg-slate-900/90">
           <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-600"></div>
-          <p className="mt-4 font-medium text-slate-600">جاري التحميل...</p>
+          <p className="mt-4 font-medium text-slate-600 dark:text-slate-300">
+            جاري التحميل...
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen flex-col bg-transparent" dir="rtl">
+    <div className="flex h-screen flex-col bg-transparent text-slate-900 dark:text-slate-100" dir="rtl">
       <DashboardHeader />
       <div className="flex-1 flex flex-col landscape:flex-row md:flex-row overflow-hidden">
         {/* Right Sidebar - Visitor List */}

