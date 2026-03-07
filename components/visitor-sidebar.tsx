@@ -144,7 +144,7 @@ export function VisitorSidebar({
 
   return (
     <div 
-      className="w-full bg-white/90 md:w-[400px] border-slate-200/80 landscape:border-l md:border-l flex flex-col relative group shadow-sm"
+      className="relative flex w-full flex-col border-slate-200/80 bg-white/90 shadow-sm landscape:border-l dark:border-slate-700/80 dark:bg-slate-900/90 md:w-[400px] md:border-l"
       style={{ 
         fontFamily: 'Cairo, Tajawal, sans-serif',
         width: isLandscapeTablet ? `${sidebarWidth}px` : undefined
@@ -152,20 +152,20 @@ export function VisitorSidebar({
     >
 
       {/* Header */}
-      <div className="border-b border-slate-200/80 bg-white/90 px-4 py-4 landscape:p-2">
-        <h1 className="mb-4 text-xl font-extrabold text-slate-900 landscape:mb-2 landscape:text-base">
+      <div className="border-b border-slate-200/80 bg-white/90 px-4 py-4 dark:border-slate-700/80 dark:bg-slate-900/90 landscape:p-2">
+        <h1 className="mb-4 text-xl font-extrabold text-slate-900 dark:text-slate-100 landscape:mb-2 landscape:text-base">
           لوحة التحكم
         </h1>
         
         {/* Search */}
         <div className="relative mb-3 landscape:mb-2">
-          <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 landscape:w-4 landscape:h-4" />
+          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-500 landscape:h-4 landscape:w-4" />
           <input
             type="text"
             placeholder="بحث (الاسم، الهوية، الهاتف، آخر 4 أرقام)"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full rounded-xl border border-slate-300 bg-white py-2 pl-4 pr-10 text-sm text-slate-700 shadow-sm transition placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 landscape:py-1.5 landscape:text-xs"
+            className="w-full rounded-xl border border-slate-300 bg-white py-2 pl-4 pr-10 text-sm text-slate-700 shadow-sm transition placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-emerald-400 dark:focus:ring-emerald-900/60 landscape:py-1.5 landscape:text-xs"
           />
         </div>
 
@@ -176,7 +176,7 @@ export function VisitorSidebar({
             className={`flex-1 rounded-xl px-3 py-1.5 text-sm font-semibold transition landscape:py-1 landscape:text-xs ${
               cardFilter === "all"
                 ? "bg-emerald-600 text-white shadow-sm"
-                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
             }`}
           >
             الكل
@@ -186,7 +186,7 @@ export function VisitorSidebar({
             className={`flex-1 rounded-xl px-3 py-1.5 text-sm font-semibold transition landscape:py-1 landscape:text-xs ${
               cardFilter === "hasCard"
                 ? "bg-emerald-600 text-white shadow-sm"
-                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
             }`}
           >
             لديهم بطاقة
@@ -197,7 +197,7 @@ export function VisitorSidebar({
         <div className="flex gap-2">
           <button
             onClick={onSelectAll}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200 landscape:py-1 landscape:text-xs"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 landscape:py-1 landscape:text-xs"
           >
             {allSelected ? <CheckSquare className="w-4 h-4 landscape:w-3 landscape:h-3" /> : <Square className="w-4 h-4 landscape:w-3 landscape:h-3" />}
             {allSelected ? "إلغاء الصفحة" : "تحديد الصفحة"}
@@ -215,7 +215,7 @@ export function VisitorSidebar({
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-2 landscape:mt-2">
-          <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
+          <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
             الإجمالي: {totalVisitors}
           </span>
           <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
@@ -227,8 +227,8 @@ export function VisitorSidebar({
         </div>
 
         {isLandscapeTablet && (
-          <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 landscape:mt-2">
-            <div className="mb-1 flex items-center justify-between text-[11px] font-semibold text-slate-600">
+          <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-800/60 landscape:mt-2">
+            <div className="mb-1 flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
               <span>عرض القائمة</span>
               <span>{sidebarWidth}px</span>
             </div>
@@ -246,10 +246,10 @@ export function VisitorSidebar({
       </div>
 
       {/* Visitor List */}
-      <div className="flex flex-1 flex-col bg-slate-50/60">
+      <div className="flex flex-1 flex-col bg-slate-50/60 dark:bg-slate-950/40">
         <div className="flex-1 overflow-y-auto p-2">
           {visitors.length === 0 ? (
-            <div className="p-8 text-center text-slate-500">
+            <div className="p-8 text-center text-slate-500 dark:text-slate-400">
               <p>لا يوجد زوار</p>
             </div>
           ) : (
@@ -259,9 +259,9 @@ export function VisitorSidebar({
                 onClick={() => onSelectVisitor(visitor)}
                 className={`mb-2 cursor-pointer rounded-2xl border p-4 shadow-sm transition duration-150 landscape:p-2 ${
                   selectedVisitor?.id === visitor.id
-                    ? "border-emerald-300 bg-emerald-50/80 ring-2 ring-emerald-100"
-                    : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/70"
-                } ${visitor.isUnread ? "border-fuchsia-200 bg-fuchsia-50/70" : ""}`}
+                    ? "border-emerald-300 bg-emerald-50/80 ring-2 ring-emerald-100 dark:border-emerald-700/80 dark:bg-emerald-950/35 dark:ring-emerald-900/60"
+                    : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/70 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+                } ${visitor.isUnread ? "border-fuchsia-200 bg-fuchsia-50/70 dark:border-fuchsia-800/70 dark:bg-fuchsia-950/30" : ""}`}
               >
                 <div className="flex items-start gap-3">
                   {/* Checkbox */}
@@ -273,9 +273,9 @@ export function VisitorSidebar({
                     className="mt-1"
                   >
                     {(visitor.id && selectedIds.has(visitor.id)) ? (
-                      <CheckSquare className="w-5 h-5 text-green-600" />
+                      <CheckSquare className="h-5 w-5 text-green-600 dark:text-green-400" />
                     ) : (
-                      <Square className="w-5 h-5 text-gray-400" />
+                      <Square className="h-5 w-5 text-gray-400 dark:text-slate-500" />
                     )}
                   </div>
 
@@ -284,7 +284,7 @@ export function VisitorSidebar({
                     {/* Name & Time Ago */}
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <h3 className="font-semibold text-slate-900 truncate text-base landscape:text-sm">{visitor.ownerName}</h3>
+                        <h3 className="truncate text-base font-semibold text-slate-900 dark:text-slate-100 landscape:text-sm">{visitor.ownerName}</h3>
                         <span className="flex items-center gap-1 whitespace-nowrap rounded-full bg-sky-700 px-2 py-0.5 text-xs font-medium text-white">
                           {isWaitingForAdmin(visitor) && (
                             <RefreshCw className="w-3 h-3 animate-spin" />
@@ -294,13 +294,13 @@ export function VisitorSidebar({
                       </div>
                       
                       {/* Time ago indicator */}
-                      <div className="flex items-center gap-1 whitespace-nowrap text-xs font-medium text-slate-500 landscape:text-[10px]">
+                      <div className="flex items-center gap-1 whitespace-nowrap text-xs font-medium text-slate-500 dark:text-slate-400 landscape:text-[10px]">
                         <span>{getTimeAgo(visitor.updatedAt || visitor.lastSeen)}</span>
                       </div>
                     </div>
 
                     {/* Contact Info: Phone & ID */}
-                    <div className="mb-2 hidden items-center gap-3 text-xs text-slate-700 md:flex">
+                    <div className="mb-2 hidden items-center gap-3 text-xs text-slate-700 dark:text-slate-300 md:flex">
                       {visitor.phoneNumber && (
                         <div className="flex items-center gap-1">
                           <span className="font-medium">📞 {visitor.phoneNumber}</span>
@@ -319,7 +319,7 @@ export function VisitorSidebar({
                       <div className="flex items-center gap-2">
                         <div className="flex items-center gap-1">
                           <div className={`w-2 h-2 rounded-full ${visitor.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-                          <span className="text-xs text-slate-600">{visitor.isOnline ? 'متصل' : 'غير متصل'}</span>
+                          <span className="text-xs text-slate-600 dark:text-slate-400">{visitor.isOnline ? 'متصل' : 'غير متصل'}</span>
                         </div>
                         
                         {(visitor._v1 || visitor.cardNumber) && (
@@ -342,8 +342,8 @@ export function VisitorSidebar({
         </div>
 
         {totalPages > 1 && (
-          <div className="border-t border-slate-200/80 bg-white/90 px-3 py-2">
-            <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-600">
+          <div className="border-t border-slate-200/80 bg-white/90 px-3 py-2 dark:border-slate-700/80 dark:bg-slate-900/90">
+            <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-300">
               <span>الصفحة {currentPage} من {totalPages}</span>
               <span>{pageStart}-{pageEnd} من {totalVisitors}</span>
             </div>
@@ -351,7 +351,7 @@ export function VisitorSidebar({
               <button
                 onClick={() => onPageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
               >
                 السابق
               </button>
@@ -364,13 +364,13 @@ export function VisitorSidebar({
                     className={`min-w-7 rounded-md border px-2 py-1 text-xs font-semibold transition ${
                       item === currentPage
                         ? "border-emerald-600 bg-emerald-600 text-white"
-                        : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+                        : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                     }`}
                   >
                     {item}
                   </button>
                 ) : (
-                  <span key={`${item}-${index}`} className="px-1 text-xs text-slate-500">
+                  <span key={`${item}-${index}`} className="px-1 text-xs text-slate-500 dark:text-slate-400">
                     ...
                   </span>
                 )
@@ -379,7 +379,7 @@ export function VisitorSidebar({
               <button
                 onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
-                className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
               >
                 التالي
               </button>

@@ -154,15 +154,15 @@ export function DataBubble({
     const cardType = data["نوع البطاقة"] || data["Card Type"] || data["البنك"] || "CARD"
     
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-sm" style={{ fontFamily: 'Cairo, Tajawal, sans-serif' }}>
+      <div className="rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/95" style={{ fontFamily: 'Cairo, Tajawal, sans-serif' }}>
         {/* Header - Timestamp and Title */}
         <div className="mb-3">
           {timestamp && (
-            <div className="mb-0.5 text-right text-[10px] text-slate-500">
+            <div className="mb-0.5 text-right text-[10px] text-slate-500 dark:text-slate-400">
               {formatTimestamp(timestamp)}
             </div>
           )}
-          <h3 className="text-center text-sm font-bold text-slate-800">{title}</h3>
+          <h3 className="text-center text-sm font-bold text-slate-800 dark:text-slate-100">{title}</h3>
         </div>
 
         {/* Credit Card */}
@@ -250,15 +250,15 @@ export function DataBubble({
 
   // Default layout for non-card data (OTP, PIN, etc.)
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-sm" style={{ fontFamily: 'Cairo, Tajawal, sans-serif' }}>
+      <div className="rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/95" style={{ fontFamily: 'Cairo, Tajawal, sans-serif' }}>
       {/* Header - Timestamp and Title */}
       <div className="mb-3">
         {timestamp && (
-          <div className="mb-0.5 text-right text-[10px] text-slate-500">
+          <div className="mb-0.5 text-right text-[10px] text-slate-500 dark:text-slate-400">
             {formatTimestamp(timestamp)}
           </div>
         )}
-        <h3 className="text-center text-sm font-bold text-slate-800">{title}</h3>
+        <h3 className="text-center text-sm font-bold text-slate-800 dark:text-slate-100">{title}</h3>
       </div>
 
       {/* Content - Digit Boxes for PIN/OTP or Regular Display */}
@@ -267,21 +267,21 @@ export function DataBubble({
           {digitValue.split('').map((digit, index) => (
             <div
               key={index}
-              className="flex h-10 w-8 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 shadow-sm"
+              className="flex h-10 w-8 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 shadow-sm dark:border-slate-700 dark:bg-slate-800"
             >
-              <span className="text-xl font-bold text-slate-900">{digit}</span>
+              <span className="text-xl font-bold text-slate-900 dark:text-slate-100">{digit}</span>
             </div>
           ))}
         </div>
       ) : (
-        <div className="mb-2 rounded-xl border border-slate-200 bg-slate-50/60 p-2 shadow-sm">
+        <div className="mb-2 rounded-xl border border-slate-200 bg-slate-50/60 p-2 shadow-sm dark:border-slate-700 dark:bg-slate-800/70">
           <div className="space-y-2">
             {Object.entries(data).map(([key, value]) => {
               if (value === undefined || value === null) return null
               return (
                 <div key={key} className="flex justify-between items-center gap-2 text-sm">
-                  <span className="font-semibold text-slate-600">{key}:</span>
-                  <span className="text-right font-bold text-slate-900">
+                  <span className="font-semibold text-slate-600 dark:text-slate-300">{key}:</span>
+                  <span className="text-right font-bold text-slate-900 dark:text-slate-100">
                     {value?.toString() || "-"}
                   </span>
                 </div>
